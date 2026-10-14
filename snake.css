@@ -1,0 +1,242 @@
+/* =====================================================
+   SNAKE.CSS — Yılan Oyunu
+===================================================== */
+.snake-page {
+  padding-top: 60px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(34,197,94,.1) 0%, transparent 55%),
+    var(--bg);
+}
+
+.snake-screen {
+  width: 100%;
+  max-width: 680px;
+  padding: 1.25rem 1rem;
+}
+
+/* ══ MENÜ ══ */
+.snake-hero {
+  text-align: center;
+  padding: 1.75rem 1rem 1.5rem;
+}
+.snake-logo {
+  font-size: 5rem;
+  line-height: 1;
+  margin-bottom: .5rem;
+  filter: drop-shadow(0 0 20px rgba(34,197,94,.5));
+  animation: snake-float 2.5s ease-in-out infinite;
+}
+@keyframes snake-float {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50%      { transform: translateY(-12px) rotate(5deg); }
+}
+.snake-hero h1 { font-size: clamp(2rem,7vw,3rem); font-weight:900; margin-bottom:.35rem; }
+.snake-hero p  { color: var(--muted2); }
+
+.snake-menu-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.snake-setting {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+.snake-setting-label {
+  font-weight: 700;
+  color: var(--muted2);
+  font-size: .88rem;
+  min-width: 65px;
+}
+
+.snake-start-btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 1.5px;
+  padding: 1rem;
+  margin-top: .5rem;
+  background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+  box-shadow: 0 4px 18px rgba(34,197,94,.35) !important;
+}
+.snake-start-btn:hover { box-shadow: 0 8px 28px rgba(34,197,94,.55) !important; }
+
+/* En yüksek skorlar */
+.snake-highscores {
+  margin-top: .5rem;
+  border-top: 1px solid var(--border);
+  padding-top: .85rem;
+}
+.snake-hs-title {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: .6rem;
+}
+.snake-hs-row {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .38rem .5rem;
+  border-radius: 7px;
+  transition: background .15s;
+}
+.snake-hs-row:hover { background: rgba(255,255,255,.04); }
+.snake-hs-rank { font-family:'Orbitron',sans-serif; font-size:.72rem; font-weight:700; color:var(--muted); width:18px; text-align:center; }
+.snake-hs-name { flex:1; font-size:.82rem; font-weight:700; }
+.snake-hs-score{ font-size:.88rem; font-weight:700; color:var(--green); }
+
+/* ══ OYUN HUD ══ */
+.snake-hud {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: .55rem 1rem;
+  margin-bottom: .6rem;
+  flex-wrap: wrap;
+}
+.snake-hud-item { display:flex; flex-direction:column; align-items:center; gap:.1rem; flex:1; }
+.snake-hud-label { font-size:.6rem; font-weight:700; color:var(--muted); letter-spacing:1px; }
+.snake-hud-val   { font-family:'Orbitron',sans-serif; font-size:1.2rem; font-weight:900; color:var(--text); }
+.snake-hud-btns  { display:flex; gap:.35rem; margin-left:auto; }
+.snake-icon-btn  {
+  background: rgba(255,255,255,.07); border:1px solid var(--border2);
+  color:var(--text); font-size:1.1rem; width:36px; height:36px;
+  border-radius:8px; cursor:pointer; transition:all .18s;
+  display:flex; align-items:center; justify-content:center;
+}
+.snake-icon-btn:hover { background:rgba(255,255,255,.14); }
+
+/* ══ CANVAS ══ */
+.snake-canvas-wrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(34,197,94,.15), 0 0 0 2px rgba(34,197,94,.2);
+  line-height: 0;
+}
+#snakeCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Duraklat overlay */
+.snake-pause-overlay {
+  position: absolute; inset:0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(6px);
+  display: flex; flex-direction:column;
+  align-items: center; justify-content: center;
+  gap: .5rem;
+}
+.snake-pause-box {
+  font-size: 2rem; font-weight:900; color:#fff;
+  letter-spacing: 3px;
+}
+
+/* ══ MOBİL D-PAD ══ */
+.snake-touch-pad {
+  display: none;
+  justify-content: center;
+  padding: .75rem 0 .5rem;
+}
+@media (max-width:768px), (pointer:coarse) {
+  .snake-touch-pad { display: flex; }
+}
+
+.snake-dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 52px);
+  grid-template-rows: repeat(3, 52px);
+  gap: 3px;
+}
+.sdpad-btn {
+  background: rgba(34,197,94,.15);
+  border: 1.5px solid rgba(34,197,94,.25);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items:center; justify-content:center;
+  user-select: none; -webkit-user-select:none;
+  touch-action: manipulation;
+  transition: background .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.sdpad-btn:active { background: rgba(34,197,94,.4); }
+.sdpad-center { background: transparent; border-color: transparent; cursor:default; }
+.sdpad-up    { grid-column:2; grid-row:1; }
+.sdpad-left  { grid-column:1; grid-row:2; }
+.sdpad-center{ grid-column:2; grid-row:2; }
+.sdpad-right { grid-column:3; grid-row:2; }
+.sdpad-down  { grid-column:2; grid-row:3; }
+
+/* ══ OYUN SONU ══ */
+#snake-gameover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 60px);
+}
+.snake-go-card {
+  background: var(--card2);
+  border: 2px solid rgba(34,197,94,.3);
+  border-radius: 22px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  max-width: 360px;
+  width: 90%;
+  box-shadow: 0 0 60px rgba(0,0,0,.6), 0 0 30px rgba(34,197,94,.1);
+}
+.snake-go-emoji { font-size: 4.5rem; margin-bottom: .75rem; }
+.snake-go-card h2 { font-size: 1.5rem; font-weight:900; margin-bottom: 1.25rem; }
+.snake-go-score {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .65rem;
+  margin-bottom: 1.25rem;
+}
+.snake-go-stat {
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: .75rem .5rem;
+}
+.snake-go-stat span { display:block; font-size:.72rem; color:var(--muted2); font-weight:700; margin-bottom:.25rem; letter-spacing:.5px; }
+.snake-go-stat b    { font-family:'Orbitron',sans-serif; font-size:1.2rem; font-weight:900; color:var(--text); }
+
+.snake-go-reward {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+  min-height: 1.4rem;
+}
+.snake-go-btns { display:flex; gap:.75rem; justify-content:center; }
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 480px) {
+  .snake-menu-card { padding: 1.1rem; }
+  .snake-setting   { gap: .5rem; }
+  .snake-setting-label { min-width: 55px; font-size:.8rem; }
+  .snake-hud       { padding: .45rem .65rem; }
+  .snake-hud-val   { font-size: 1rem; }
+  .snake-go-card   { padding: 2rem 1.25rem; }
+}

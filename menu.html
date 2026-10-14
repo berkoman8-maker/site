@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlitchGrid — Ana Menü</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="js/sw-register.js" defer></script>
+</head>
+<body>
+
+  <header id="navbar" class="navbar"></header>
+
+  <main class="menu-page">
+
+    <!-- HOŞGELDIN HERO -->
+    <section class="welcome-hero">
+      <div class="welcome-bg-grid"></div>
+      <div class="welcome-content fade-in">
+        <p class="welcome-line">Hoş geldin,</p>
+        <h1 class="welcome-name gradient-text orbitron" id="welcome-username">Oyuncu</h1>
+        <div class="welcome-stats" id="welcome-stats">
+          <div class="wstat">
+            <span class="wstat-val" id="ws-balance">0</span>
+            <span class="wstat-label">🪙 Bakiye</span>
+          </div>
+          <div class="wstat-div"></div>
+          <div class="wstat">
+            <span class="wstat-val" id="ws-level">1</span>
+            <span class="wstat-label">⭐ Seviye</span>
+          </div>
+          <div class="wstat-div"></div>
+          <div class="wstat">
+            <span class="wstat-val" id="ws-cases">0</span>
+            <span class="wstat-label">📦 Açılan Case</span>
+          </div>
+          <div class="wstat-div"></div>
+          <div class="wstat">
+            <span class="wstat-val" id="ws-wins">0</span>
+            <span class="wstat-label">⚽ Maç Kazandı</span>
+          </div>
+        </div>
+        <!-- XP bar -->
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-labels">
+            <span>Seviye <b id="xp-lvl">1</b></span>
+            <span id="xp-text">0 / 500 XP</span>
+          </div>
+          <div class="xp-bar-outer">
+            <div class="xp-bar-inner" id="xp-bar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OYUN SEÇİMİ -->
+    <section class="games-section">
+      <h2 class="sec-title">Oyun Seç <span></span></h2>
+
+      <div class="games-grid">
+
+        <!-- Case Opening -->
+        <div class="game-card case-card" onclick="window.location.href='cases.html'">
+          <div class="game-card-shine"></div>
+          <div class="game-card-icon">📦</div>
+          <div class="game-card-badge hot">🔥 HOT</div>
+          <h3 class="game-card-title">Case Opening</h3>
+          <p class="game-card-desc">
+            10'dan fazla farklı kasa açabilirsin. Her kasada yüzlerce skin ve eşya var.
+            Efsanevi eşyalar için şansını dene!
+          </p>
+          <ul class="game-card-features">
+            <li><i class="fa-solid fa-box-open"></i> 12 Farklı Kasa</li>
+            <li><i class="fa-solid fa-gem"></i> 6 Nadir Seviyesi</li>
+            <li><i class="fa-solid fa-sack-dollar"></i> Eşyaları Sat</li>
+            <li><i class="fa-solid fa-warehouse"></i> Envanter Sistemi</li>
+          </ul>
+          <button class="game-card-btn btn-purple">
+            <i class="fa-solid fa-box-open"></i> HEMEN OYNa
+          </button>
+        </div>
+
+        <!-- Futbol -->
+        <div class="game-card football-card" onclick="window.location.href='football.html'">
+          <div class="game-card-shine"></div>
+          <div class="game-card-icon">⚽</div>
+          <div class="game-card-badge new">🆕 BOT AI</div>
+          <h3 class="game-card-title">2D Futbol</h3>
+          <p class="game-card-desc">
+            Haxball tarzı 2D fizik motoru ile futbol oyna! Bot AI, 3v3/5v5/6v6 modları,
+            F tuşuyla top çalma.
+          </p>
+          <ul class="game-card-features">
+            <li><i class="fa-solid fa-robot"></i> Bot AI (4 Zorluk)</li>
+            <li><i class="fa-solid fa-users"></i> 3v3 / 5v5 / 6v6</li>
+            <li><i class="fa-solid fa-trophy"></i> Kazanma İstatistikleri</li>
+            <li><i class="fa-solid fa-clock"></i> Süre & Gol Sınırı</li>
+          </ul>
+          <button class="game-card-btn btn-cyan">
+            <i class="fa-solid fa-futbol"></i> HEMEN OYNA
+          </button>
+        </div>
+
+        <!-- Yılan -->
+        <div class="game-card snake-card" onclick="window.location.href='snake.html'">
+          <div class="game-card-shine"></div>
+          <div class="game-card-icon">🐍</div>
+          <div class="game-card-badge" style="background:rgba(34,197,94,.2);color:#86efac;border:1px solid rgba(34,197,94,.35)">YENİ</div>
+          <h3 class="game-card-title">Yılan</h3>
+          <p class="game-card-desc">
+            Klasik yılan oyunu, yenilenmiş! Özel yemler, 4 farklı tema,
+            seviye sistemi ve bakiye ödülleri seni bekliyor.
+          </p>
+          <ul class="game-card-features">
+            <li><i class="fa-solid fa-star"></i> Özel Yemler</li>
+            <li><i class="fa-solid fa-palette"></i> 4 Farklı Tema</li>
+            <li><i class="fa-solid fa-bolt"></i> 4 Hız Modu</li>
+            <li><i class="fa-solid fa-coins"></i> 🪙 Bakiye Kazan</li>
+          </ul>
+          <button class="game-card-btn btn-green-snake">
+            <i class="fa-solid fa-snake"></i> HEMEN OYNA
+          </button>
+        </div>
+
+        <!-- XOX -->
+        <div class="game-card xox-card" onclick="window.location.href='xox.html'">
+          <div class="game-card-shine"></div>
+          <div class="game-card-icon" style="font-size:2.6rem;display:flex;gap:.3rem;align-items:center">
+            <span style="color:var(--primary2);font-family:'Orbitron',sans-serif;font-weight:900">✕</span>
+            <span style="color:var(--cyan);font-family:'Orbitron',sans-serif;font-weight:900">◯</span>
+          </div>
+          <div class="game-card-badge" style="background:rgba(6,182,212,.2);color:#a5f3fc;border:1px solid rgba(6,182,212,.35)">YENİ</div>
+          <h3 class="game-card-title">XOX</h3>
+          <p class="game-card-desc">
+            Üç dizi yap, kazan! Yapay zekaya karşı, aynı cihazda
+            veya online lobi ile arkadaşınla oyna.
+          </p>
+          <ul class="game-card-features">
+            <li><i class="fa-solid fa-robot"></i> 4 Zorluk AI</li>
+            <li><i class="fa-solid fa-wifi"></i> Online Lobi</li>
+            <li><i class="fa-solid fa-users"></i> 2 Oyuncu Mod</li>
+            <li><i class="fa-solid fa-coins"></i> 🪙 Bakiye Kazan</li>
+          </ul>
+          <button class="game-card-btn btn-xox">
+            <i class="fa-solid fa-xmark"></i> HEMEN OYNA
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ENVANTER ÖNİZLEME -->
+    <section class="inventory-preview-section">
+      <div class="inv-preview-header">
+        <h2 class="sec-title">Son Eşyalar <span></span></h2>
+        <a href="cases.html#inventory" class="btn btn-secondary btn-sm">Tümünü Gör</a>
+      </div>
+      <div class="inv-preview-grid" id="inv-preview-grid">
+        <p class="no-items-msg" id="no-items-msg">Henüz eşyan yok. Case aç ve koleksiyonunu büyüt!</p>
+      </div>
+    </section>
+
+    <!-- İSTATİSTİK PANEL -->
+    <section class="stats-section">
+      <h2 class="sec-title">İstatistiklerim <span></span></h2>
+      <div class="stats-grid" id="stats-grid"></div>
+    </section>
+
+  </main>
+
+  <footer class="menu-footer">
+    <p>© 2026 GlitchGrid — Tüm hakları saklıdır.</p>
+  </footer>
+
+  <div id="gz-toast"></div>
+  <script src="js/auth.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>
+    if (!GZ.requireAuth()) throw '';
+
+    const user = GZ.currentUser();
+
+    // Navbar
+    GZ.renderNavbar('menu');
+
+    // Hoşgeldin alanı
+    document.getElementById('welcome-username').textContent = user.username;
+    document.getElementById('ws-balance').textContent = user.balance.toLocaleString('tr-TR');
+    document.getElementById('ws-level').textContent   = user.level || 1;
+    document.getElementById('ws-cases').textContent   = user.stats?.casesOpened || 0;
+    document.getElementById('ws-wins').textContent    = user.stats?.footballWins || 0;
+
+    // XP bar
+    const lvl    = user.level || 1;
+    const xp     = user.xp || 0;
+    const needed = lvl * 500;
+    const pct    = Math.min(100, Math.round((xp / needed) * 100));
+    document.getElementById('xp-lvl').textContent  = lvl;
+    document.getElementById('xp-text').textContent = `${xp} / ${needed} XP`;
+    document.getElementById('xp-bar').style.width  = pct + '%';
+
+    // Son 8 envanter eşyası
+    const RARITY_COLORS = {
+      common:'#64748b', uncommon:'#22c55e', rare:'#3b82f6',
+      epic:'#a855f7', legendary:'#f59e0b', ancient:'#ef4444', contraband:'#ff6ef7'
+    };
+    const inv = (user.inventory || []).slice().reverse().slice(0, 8);
+    const grid = document.getElementById('inv-preview-grid');
+    if (inv.length > 0) {
+      document.getElementById('no-items-msg').remove();
+      inv.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'inv-prev-item';
+        el.style.borderColor = RARITY_COLORS[item.rarity] || '#64748b';
+        el.innerHTML = `
+          <span class="inv-prev-emoji">${item.emoji}</span>
+          <span class="inv-prev-name">${item.name}</span>
+          <span class="inv-prev-val" style="color:${RARITY_COLORS[item.rarity]}">${item.value.toLocaleString('tr-TR')} 🪙</span>
+        `;
+        grid.appendChild(el);
+      });
+    }
+
+    // İstatistikler
+    const s = user.stats || {};
+    const statItems = [
+      { icon:'📦', label:'Açılan Case',      val: s.casesOpened   || 0 },
+      { icon:'⚽', label:'Oynanan Maç',      val: s.footballGames || 0 },
+      { icon:'🏆', label:'Kazanılan Maç',    val: s.footballWins  || 0 },
+      { icon:'⚡', label:'Atılan Gol',       val: s.totalGoals    || 0 },
+      { icon:'🪙', label:'Toplam Kazanç',    val: (s.totalEarned  || 0).toLocaleString('tr-TR') + ' 🪙' },
+      { icon:'🎒', label:'Envanter',         val: (user.inventory || []).length + ' eşya' },
+      { icon:'⭐', label:'Seviye',           val: user.level || 1 },
+      { icon:'💰', label:'Bakiye',           val: (user.balance || 0).toLocaleString('tr-TR') + ' 🪙' },
+    ];
+    const sg = document.getElementById('stats-grid');
+    statItems.forEach(si => {
+      sg.innerHTML += `
+        <div class="stat-card fade-in">
+          <div class="stat-card-icon">${si.icon}</div>
+          <div class="stat-card-val">${si.val}</div>
+          <div class="stat-card-label">${si.label}</div>
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>

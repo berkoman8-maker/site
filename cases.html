@@ -1,0 +1,497 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>GlitchGrid — Case Opening</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/cases.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="js/sw-register.js" defer></script>
+</head>
+<body>
+<header id="navbar" class="navbar"></header>
+
+<div class="cases-page">
+
+  <!-- ═══════════════ SOL SİDEBAR ═══════════════ -->
+  <aside class="cases-sidebar">
+    <div class="sidebar-section-title">OYUNLAR</div>
+
+    <button class="sidebar-nav-btn active" onclick="switchPanel('open')" id="snb-open">
+      <i class="fa-solid fa-box-open"></i><span>Case Aç</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="switchPanel('battle')" id="snb-battle">
+      <i class="fa-solid fa-swords"></i><span>Kasa Savaşı</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="switchPanel('wheel')" id="snb-wheel">
+      <i class="fa-solid fa-circle-dot"></i><span>Çark</span>
+    </button>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">KATEGORİLER</div>
+
+    <button class="sidebar-nav-btn" onclick="filterCategory('all')" id="snb-all">
+      <i class="fa-solid fa-layer-group"></i><span>Tümü</span>
+      <span class="snb-badge" id="badge-all">0</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="filterCategory('basic')" id="snb-basic">
+      <i class="fa-solid fa-cube"></i><span>Temel</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="filterCategory('premium')" id="snb-premium">
+      <i class="fa-solid fa-star"></i><span>Premium</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="filterCategory('elite')" id="snb-elite">
+      <i class="fa-solid fa-crown"></i><span>Elit</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="filterCategory('legendary')" id="snb-legendary">
+      <i class="fa-solid fa-dragon"></i><span>Efsanevi</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="filterCategory('special')" id="snb-special">
+      <i class="fa-solid fa-wand-magic-sparkles"></i><span>Özel</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="filterCategory('event')" id="snb-event">
+      <i class="fa-solid fa-gift"></i><span>Etkinlik</span>
+    </button>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-title">HESAP</div>
+
+    <button class="sidebar-nav-btn" onclick="switchPanel('inventory')" id="snb-inventory">
+      <i class="fa-solid fa-warehouse"></i><span>Envanter</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="switchPanel('leaderboard')" id="snb-leaderboard">
+      <i class="fa-solid fa-ranking-star"></i><span>Sıralama</span>
+    </button>
+    <button class="sidebar-nav-btn" onclick="switchPanel('rebirth')" id="snb-rebirth">
+      <i class="fa-solid fa-fire-flame-curved"></i><span>Rebirth</span>
+    </button>
+
+    <!-- Rebirth gösterge -->
+    <div class="sidebar-rebirth" id="sidebar-rebirth-info">
+      <div class="sidebar-rebirth-title">REBİRTH</div>
+      <div class="sidebar-rebirth-val" id="sb-rebirth-count">0</div>
+      <div class="sidebar-rebirth-mult" id="sb-rebirth-mult">Çarpan: x1.00</div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════ ANA İÇERİK ═══════════════ -->
+  <div class="cases-content">
+
+    <!-- ══ PANEL: CASE AÇ ══ -->
+    <div class="cases-panel active" id="panel-open">
+
+      <!-- Kasa Listesi -->
+      <div id="view-caselist">
+        <div class="cases-hero">
+          <h1>Case Opening</h1>
+          <p>Bir kasa seç, şansını dene!</p>
+        </div>
+        <div id="cases-categories-wrap"></div>
+      </div>
+
+      <!-- Kasa Açma Ekranı -->
+      <div id="view-opencase" class="hidden">
+        <div class="open-section">
+          <button class="back-btn" onclick="showCaseList()">
+            <i class="fa-solid fa-arrow-left"></i> Kasalara Dön
+          </button>
+          <div class="open-header">
+            <div class="open-case-icon" id="open-icon">📦</div>
+            <div>
+              <h2 class="open-case-name orbitron" id="open-name">—</h2>
+              <p class="open-case-price" id="open-price">—</p>
+              <p class="text-muted" id="open-desc" style="font-size:.85rem">—</p>
+            </div>
+          </div>
+          <div class="contents-preview" id="contents-preview"></div>
+          <div class="roulette-wrap">
+            <div class="roulette-needle"></div>
+            <div class="roulette-outer">
+              <div class="roulette-track" id="roulette-track"></div>
+            </div>
+          </div>
+          <div class="open-actions">
+            <button class="btn btn-primary btn-lg open-main-btn" id="open-btn" onclick="triggerOpen()">
+              <i class="fa-solid fa-box-open"></i> KASA AÇ
+            </button>
+            <button class="btn btn-secondary" id="open-x3-btn" onclick="triggerOpenMulti(3)">
+              <i class="fa-solid fa-boxes-stacked"></i> 3x AÇ
+            </button>
+            <div class="open-balance-info">Bakiye: <span id="open-bal" class="gold-text">0</span> 🪙</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kazanılan Eşya Popup -->
+      <div class="won-overlay hidden" id="won-overlay">
+        <div class="won-card pop-in" id="won-card">
+          <button class="won-close" onclick="closeWon()">✕</button>
+          <div class="won-label" id="won-label">TEBRİKLER!</div>
+          <span class="won-emoji" id="won-emoji">🎉</span>
+          <div class="won-rarity" id="won-rarity-text">EFSANEVİ</div>
+          <div class="won-name"   id="won-item-name">—</div>
+          <div class="won-value"  id="won-item-value">0 🪙</div>
+          <div class="won-actions-row">
+            <button class="btn btn-green" onclick="keepWon()"><i class="fa-solid fa-bag-shopping"></i> Sakla</button>
+            <button class="btn btn-gold"  onclick="sellWon()"><i class="fa-solid fa-sack-dollar"></i> Sat</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Çoklu Açma Sonuçları -->
+      <div class="multi-results hidden" id="multi-results">
+        <div class="open-section" style="padding-top:0">
+          <h3 class="multi-title">Kazandıkların</h3>
+          <div class="multi-grid" id="multi-grid"></div>
+          <div class="multi-actions">
+            <button class="btn btn-green"     onclick="keepAll()">Hepsini Sakla</button>
+            <button class="btn btn-gold"      onclick="sellAll()">Hepsini Sat</button>
+            <button class="btn btn-secondary" onclick="closeMulti()">Kapat</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: KASA SAVAŞI ══ -->
+    <div class="cases-panel" id="panel-battle">
+      <div class="battle-hero">
+        <h1>⚔️ Kasa Savaşı</h1>
+        <p class="text-muted">Aynı kasayı aç, en değerli eşyayı çıkaran kazanır!</p>
+      </div>
+      <div class="battle-section">
+
+        <!-- EKRAN A: Lobi / Kurulum -->
+        <div id="battle-screen-setup">
+
+          <!-- Lobi oluştur / katıl -->
+          <div class="battle-lobby-grid">
+            <div class="battle-lobby-panel">
+              <h3 class="orbitron" style="font-size:.95rem;margin-bottom:1rem">
+                <i class="fa-solid fa-swords" style="color:var(--red)"></i> Mevcut Lobiler
+              </h3>
+              <div id="battle-lobby-list" class="battle-lobby-list">
+                <p class="no-lobbies-msg">Henüz lobi yok.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm mt-2" onclick="refreshBattleLobbies()" style="width:100%">
+                <i class="fa-solid fa-rotate"></i> Yenile
+              </button>
+            </div>
+
+            <div class="battle-create-panel">
+              <h3 class="orbitron" style="font-size:.95rem;margin-bottom:1rem">
+                <i class="fa-solid fa-plus" style="color:var(--primary2)"></i> Lobi Oluştur
+              </h3>
+
+              <div class="form-field">
+                <label>Kasa Seç</label>
+                <select class="gz-input" id="battle-case-select" onchange="updateBattlePreview()" style="padding-left:.9rem">
+                  <option value="">-- Kasa seçin --</option>
+                </select>
+              </div>
+
+              <div class="battle-case-preview-box" id="battle-case-preview" style="display:none">
+                <span id="bcp-emoji" style="font-size:2rem">📦</span>
+                <div>
+                  <b id="bcp-name" style="font-size:.88rem">—</b><br/>
+                  <span id="bcp-price" style="font-size:.8rem;color:var(--gold)">—</span>
+                </div>
+              </div>
+
+              <div class="form-field mt-2">
+                <label>Kaç Kasa Açılacak?</label>
+                <div class="opt-group" id="battle-count-opts">
+                  <button class="opt-btn active" data-val="1">1 Kasa</button>
+                  <button class="opt-btn" data-val="3">3 Kasa</button>
+                  <button class="opt-btn" data-val="5">5 Kasa</button>
+                  <button class="opt-btn" data-val="10">10 Kasa</button>
+                </div>
+              </div>
+
+              <div class="battle-cost-info" id="battle-cost-info" style="display:none">
+                <span>Toplam Maliyet:</span>
+                <span id="battle-total-cost" class="gold-text">—</span>
+                <span class="text-muted" style="font-size:.75rem">(bakiyenden düşülür)</span>
+              </div>
+
+              <div class="form-field mt-2">
+                <label>Lobi Adı <small class="text-muted">(opsiyonel)</small></label>
+                <div class="input-wrap">
+                  <i class="fa-solid fa-flag input-icon"></i>
+                  <input class="gz-input" id="battle-lobby-name" placeholder="Efsane Düello" maxlength="24"/>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label>Şifre <small class="text-muted">(opsiyonel)</small></label>
+                <div class="input-wrap">
+                  <i class="fa-solid fa-lock input-icon"></i>
+                  <input class="gz-input" id="battle-lobby-pass" type="password" placeholder="Şifresiz = herkese açık"/>
+                </div>
+              </div>
+
+              <button class="btn btn-red btn-full mt-2" onclick="createBattleLobby()">
+                <i class="fa-solid fa-swords"></i> Lobi Oluştur
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- EKRAN B: Bekleme Odası -->
+        <div id="battle-screen-waiting" class="hidden">
+          <div class="battle-wait-card">
+            <div class="battle-wait-header">
+              <div>
+                <h3 class="orbitron" id="bw-title">Savaş Lobisi</h3>
+                <p class="text-muted" id="bw-info">—</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="leaveBattleLobby()">
+                <i class="fa-solid fa-door-open"></i> Çık
+              </button>
+            </div>
+
+            <div class="battle-wait-players" id="bw-players"></div>
+
+            <div class="battle-wait-details" id="bw-details"></div>
+
+            <div class="battle-wait-share">
+              <span class="text-muted" style="font-size:.78rem">Lobi ID:</span>
+              <code id="bw-share-id" class="lobby-id-code">—</code>
+              <button class="btn btn-secondary btn-sm" onclick="copyBattleLobbyId()">
+                <i class="fa-solid fa-copy"></i>
+              </button>
+            </div>
+
+            <button class="btn btn-red btn-full mt-3" id="battle-start-btn" onclick="startBattleFromLobby()" disabled>
+              <i class="fa-solid fa-swords"></i> SAVAŞI BAŞLAT <span id="battle-start-hint">(Rakip bekleniyor)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- EKRAN C: Animasyon + Sonuç -->
+        <div id="battle-screen-fight" class="hidden">
+          <div class="battle-fight-area">
+            <h2 class="orbitron battle-fight-title" id="bf-title">⚔️ SAVAŞ BAŞLIYOR!</h2>
+
+            <!-- Oyuncu kartları -->
+            <div class="battle-fight-grid" id="bf-grid"></div>
+
+            <!-- Tek kasa animasyon alanı (sırayla açılır) -->
+            <div class="battle-anim-area" id="battle-anim-area">
+              <div class="ba-round-label orbitron" id="ba-round">Tur 1 / 1</div>
+              <div class="ba-players-row" id="ba-players-row"></div>
+
+              <!-- Çift roulette (iki oyuncuya aynı anda döner) -->
+              <div class="ba-roulettes" id="ba-roulettes"></div>
+
+              <div class="ba-status" id="ba-status">Hazırlanıyor...</div>
+            </div>
+
+            <!-- Sonuç scoreboard -->
+            <div class="battle-score-board hidden" id="battle-score-board">
+              <div class="bsb-row" id="bsb-p1-row"></div>
+              <div class="bsb-row" id="bsb-p2-row"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EKRAN D: Oyun Sonu -->
+        <div class="battle-result-overlay hidden" id="battle-result-overlay">
+          <div class="battle-result-card pop-in">
+            <div class="battle-result-title" id="br-title">🏆 KAZANAN!</div>
+            <div class="battle-winner-banner" id="br-banner">—</div>
+            <div class="battle-result-rounds" id="br-rounds"></div>
+            <div class="battle-result-btns">
+              <button class="btn btn-primary" onclick="rematchBattle()">
+                <i class="fa-solid fa-rotate"></i> Rövanş
+              </button>
+              <button class="btn btn-secondary" onclick="closeBattleResult()">Kapat</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ PANEL: ÇARK ══ -->
+    <div class="cases-panel" id="panel-wheel">
+      <div class="wheel-hero">
+        <h1>🎡 Eşya Çarkı</h1>
+        <p class="text-muted">Envanterinden eşya koy, çark 10 eşyada döner — kazanacak eşyayı şans belirler!</p>
+      </div>
+      <div class="wheel-section">
+        <div class="wheel-layout">
+
+          <!-- Sol: Çark -->
+          <div class="wheel-canvas-wrap">
+            <div class="wheel-needle-wrap">
+              <div class="wheel-needle-top"></div>
+              <canvas id="wheelCanvas" width="360" height="360"></canvas>
+            </div>
+            <div class="wheel-status" id="wheel-status">Eşya ekleyip çarkı döndür!</div>
+            <button class="btn btn-primary wheel-spin-btn" id="wheel-spin-btn" onclick="spinWheel()" disabled>
+              <i class="fa-solid fa-circle-dot"></i> ÇARKI DÖNDÜR
+            </button>
+          </div>
+
+          <!-- Sağ: Panel -->
+          <div class="wheel-panel">
+
+            <!-- Eşya Ekle -->
+            <div class="wheel-add-card">
+              <div class="wheel-panel-title">
+                <i class="fa-solid fa-plus"></i> Eşya Ekle
+              </div>
+              <p class="text-muted" style="font-size:.8rem;margin-bottom:.75rem">
+                Envanterindeki eşyaları çarka ekle. Kazanan hepsini alır!
+              </p>
+              <div class="inventory-grid" id="wheel-inv-grid" style="grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:.5rem">
+                <p class="empty-inv-msg" id="wheel-inv-empty">Envanterin boş.</p>
+              </div>
+            </div>
+
+            <!-- Çarkdaki Eşyalar -->
+            <div class="wheel-pool-card">
+              <div class="wheel-panel-title">
+                <i class="fa-solid fa-list"></i> Çarkdaki Eşyalar
+                <span style="margin-left:auto;font-size:.75rem;color:var(--muted2)" id="wheel-count">0/10</span>
+              </div>
+              <div class="wheel-item-list" id="wheel-item-list">
+                <p class="wheel-empty-msg" id="wheel-pool-empty">Henüz eşya yok.</p>
+              </div>
+            </div>
+
+            <!-- Oylama -->
+            <div class="wheel-vote-card" id="wheel-vote-card">
+              <div class="wheel-panel-title">
+                <i class="fa-solid fa-vote-yea"></i> Erken Döndürme Oylaması
+              </div>
+              <div class="vote-progress">
+                <div class="vote-label">Oy durumu — en az 3 eşya gerekir</div>
+                <div class="vote-bar-outer">
+                  <div class="vote-bar-inner" id="vote-bar" style="width:0%"></div>
+                </div>
+                <div class="vote-count" id="vote-count-text">0 / 0 oy</div>
+              </div>
+              <button class="btn btn-secondary btn-full" id="vote-btn" onclick="castVote()">
+                <i class="fa-solid fa-check"></i> Erken Döndür (Oy Ver)
+              </button>
+              <p class="text-muted mt-1" style="font-size:.75rem;text-align:center">
+                Herkes oy verirse çark erken döner
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: ENVANTER ══ -->
+    <div class="cases-panel" id="panel-inventory">
+      <div class="inventory-section">
+        <div class="inv-top">
+          <h2 class="sec-title">Envanter <span></span></h2>
+          <div class="inv-controls">
+            <select class="gz-select" id="inv-sort" onchange="renderInventory()">
+              <option value="newest">En Yeni</option>
+              <option value="value-desc">Değer ↓</option>
+              <option value="value-asc">Değer ↑</option>
+              <option value="rarity">Nadirlik</option>
+            </select>
+            <button class="btn btn-red btn-sm" onclick="sellAllInventory()">
+              <i class="fa-solid fa-sack-dollar"></i> Hepsini Sat
+            </button>
+          </div>
+        </div>
+        <div class="inventory-stats" id="inv-stats"></div>
+        <div class="inventory-grid" id="inventory-grid">
+          <p class="empty-inv-msg">Henüz eşyan yok. Case aç!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PANEL: SIRALAMA ══ -->
+    <div class="cases-panel" id="panel-leaderboard">
+      <div class="lb-hero">
+        <h1 class="lb-title orbitron gradient-text">🏆 Sıralama Tablosu</h1>
+        <p class="text-muted">GlitchGrid'un en iyi oyuncuları</p>
+
+        <!-- Sekme -->
+        <div class="lb-tabs" id="lb-tabs">
+          <button class="lb-tab active" data-cat="balance"   onclick="switchLbTab('balance',this)">💰 Bakiye</button>
+          <button class="lb-tab"        data-cat="cases"     onclick="switchLbTab('cases',this)">📦 Case</button>
+          <button class="lb-tab"        data-cat="invvalue"  onclick="switchLbTab('invvalue',this)">🎒 Envanter</button>
+          <button class="lb-tab"        data-cat="rebirth"   onclick="switchLbTab('rebirth',this)">🔥 Rebirth</button>
+          <button class="lb-tab"        data-cat="fbwins"    onclick="switchLbTab('fbwins',this)">⚽ Futbol</button>
+          <button class="lb-tab"        data-cat="level"     onclick="switchLbTab('level',this)">⭐ Seviye</button>
+        </div>
+      </div>
+
+      <!-- Podiyum -->
+      <div class="lb-podium" id="lb-podium"></div>
+
+      <!-- Tam liste -->
+      <div class="lb-list-wrap">
+        <div class="lb-search-row">
+          <div class="input-wrap" style="max-width:260px">
+            <i class="fa-solid fa-magnifying-glass input-icon"></i>
+            <input class="gz-input" id="lb-search" placeholder="Oyuncu ara..." oninput="renderLeaderboard()"/>
+          </div>
+          <span class="lb-total-badge" id="lb-total-badge">0 oyuncu</span>
+        </div>
+        <div class="lb-table-wrap">
+          <table class="lb-table">
+            <thead>
+              <tr>
+                <th class="lb-rank-th">#</th>
+                <th>Oyuncu</th>
+                <th id="lb-val-th">Değer</th>
+                <th>Seviye</th>
+                <th>Rebirth</th>
+                <th>Case</th>
+                <th>Futbol G/O</th>
+              </tr>
+            </thead>
+            <tbody id="lb-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Kendi konumum -->
+      <div class="lb-myrank-bar" id="lb-myrank-bar"></div>
+    </div>
+
+    <!-- ══ PANEL: REBİRTH ══ -->
+    <div class="cases-panel" id="panel-rebirth">
+      <div class="rebirth-section">
+        <div class="rebirth-card">
+          <div class="rebirth-icon">🔥</div>
+          <h2 class="rebirth-title">REBİRTH</h2>
+          <p class="rebirth-desc">
+            Tüm bakiyeni ve envanterini sıfırla, karşılığında kalıcı bir kazanç çarpanı kazan!
+            Her rebirth'te eşyalardan elde ettiğin değer artar.
+            <br><br>
+            <b>Rebirth 1 → x1.25 | Rebirth 2 → x1.50 | Rebirth 3 → x2.00 | Rebirth 5 → x3.00</b>
+          </p>
+          <div class="rebirth-current" id="rebirth-current-stats"></div>
+          <div class="rebirth-warning">
+            ⚠️ Rebirth attıktan sonra tüm bakiyen ve envanterin silinir. Bu işlem geri alınamaz!
+          </div>
+          <button class="btn btn-gold rebirth-confirm-btn btn-full" id="rebirth-btn" onclick="doRebirth()">
+            <i class="fa-solid fa-fire-flame-curved"></i> REBİRTH AT
+          </button>
+          <div class="rebirth-history" id="rebirth-history" style="margin-top:1.5rem"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /cases-content -->
+</div><!-- /cases-page -->
+
+<div id="gz-toast"></div>
+<script src="js/auth.js"></script>
+<script src="js/music.js"></script>
+<script src="js/feedback.js"></script>
+<script src="js/cases-bundle.js"></script>
+</body>
+</html>

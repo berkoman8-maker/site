@@ -1,0 +1,407 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GlitchGrid — Admin Panel</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/admin.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="js/sw-register.js" defer></script>
+</head>
+<body class="admin-body">
+
+  <!-- ══ GİRİŞ EKRANI ══ -->
+  <div id="admin-login-screen" class="admin-login-wrap">
+    <div class="admin-login-card pop-in">
+      <div class="admin-logo">
+        <span class="admin-shield">🛡️</span>
+        <div>
+          <div class="orbitron gradient-text" style="font-size:1.5rem;font-weight:900">GlitchGrid</div>
+          <div style="font-size:.8rem;color:var(--muted2);letter-spacing:2px">ADMIN PANELİ</div>
+        </div>
+      </div>
+
+      <form onsubmit="doAdminLogin(event)">
+        <div class="form-field">
+          <label>Admin Kullanıcı Adı</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-user-shield input-icon"></i>
+            <input class="gz-input" id="adm-user" type="text" placeholder="admin" autocomplete="username"/>
+          </div>
+        </div>
+        <div class="form-field mt-2">
+          <label>Şifre</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input class="gz-input" id="adm-pass" type="password" placeholder="••••••••" autocomplete="current-password"/>
+            <button type="button" class="pass-toggle" onclick="toggleAdminPass()">
+              <i class="fa-solid fa-eye" id="adm-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="form-error hidden" id="adm-err"></div>
+        <button type="submit" class="btn btn-primary btn-full mt-3" style="font-family:'Orbitron',sans-serif;letter-spacing:1px">
+          <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+        </button>
+      </form>
+      <p style="text-align:center;margin-top:1rem;font-size:.82rem">
+        <a href="index.html" style="color:var(--muted2);text-decoration:none">← Siteye dön</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ══ ADMIN PANEL ══ -->
+  <div id="admin-panel" class="hidden">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <span>🛡️</span>
+        <span class="orbitron" style="font-size:1rem;font-weight:900">ADMIN</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="snav-btn active" data-tab="dashboard" onclick="switchTab('dashboard',this)">
+          <i class="fa-solid fa-gauge"></i> Dashboard
+        </button>
+        <button class="snav-btn" data-tab="players" onclick="switchTab('players',this)">
+          <i class="fa-solid fa-users"></i> Oyuncular
+        </button>
+        <button class="snav-btn" data-tab="lobbies" onclick="switchTab('lobbies',this)">
+          <i class="fa-solid fa-server"></i> Lobiler
+        </button>
+        <button class="snav-btn" data-tab="inventory" onclick="switchTab('inventory',this)">
+          <i class="fa-solid fa-warehouse"></i> Envanterler
+        </button>
+        <button class="snav-btn" data-tab="feedback" onclick="switchTab('feedback',this)">
+          <i class="fa-solid fa-comment-dots"></i> Geri Bildirimler
+        </button>
+        <button class="snav-btn" data-tab="cases" onclick="switchTab('cases',this)">
+          <i class="fa-solid fa-box-open"></i> Kasa Yönetimi
+        </button>
+        <button class="snav-btn" data-tab="settings" onclick="switchTab('settings',this)">
+          <i class="fa-solid fa-gear"></i> Ayarlar
+        </button>
+      </nav>
+
+      <button class="sidebar-logout" onclick="adminLogout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Çıkış
+      </button>
+    </aside>
+
+    <!-- İçerik -->
+    <div class="admin-content">
+
+      <!-- Topbar -->
+      <div class="admin-topbar">
+        <div class="topbar-title orbitron" id="topbar-title">Dashboard</div>
+        <div class="topbar-right">
+          <span class="topbar-badge">🛡️ Admin</span>
+          <span class="topbar-time" id="topbar-time"></span>
+        </div>
+      </div>
+
+      <!-- ── DASHBOARD ── -->
+      <div class="tab-content" id="tab-dashboard">
+        <div class="stat-cards" id="dash-stats"></div>
+
+        <div class="dash-grid">
+          <!-- Son kayıtlar -->
+          <div class="dash-panel">
+            <h3 class="panel-head"><i class="fa-solid fa-user-plus"></i> Son Kayıtlar</h3>
+            <div id="recent-users"></div>
+          </div>
+          <!-- En zenginler -->
+          <div class="dash-panel">
+            <h3 class="panel-head"><i class="fa-solid fa-sack-dollar"></i> En Zengin Oyuncular</h3>
+            <div id="rich-users"></div>
+          </div>
+          <!-- En çok case açanlar -->
+          <div class="dash-panel">
+            <h3 class="panel-head"><i class="fa-solid fa-box-open"></i> En Çok Case Açan</h3>
+            <div id="case-users"></div>
+          </div>
+          <!-- En çok kazanan -->
+          <div class="dash-panel">
+            <h3 class="panel-head"><i class="fa-solid fa-trophy"></i> Futbol Şampiyonları</h3>
+            <div id="win-users"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── OYUNCULAR ── -->
+      <div class="tab-content hidden" id="tab-players">
+        <div class="table-toolbar">
+          <div class="input-wrap" style="max-width:280px">
+            <i class="fa-solid fa-magnifying-glass input-icon"></i>
+            <input class="gz-input" id="player-search" placeholder="Oyuncu ara..." oninput="renderPlayersTable()"/>
+          </div>
+          <div class="table-toolbar-right">
+            <span class="muted-label" id="player-count">0 oyuncu</span>
+          </div>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="players-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Kullanıcı Adı</th>
+                <th>Seviye</th>
+                <th>Bakiye</th>
+                <th>Case</th>
+                <th>Maç</th>
+                <th>Galibiyet</th>
+                <th>Durum</th>
+                <th>Kayıt Tarihi</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody id="players-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── LOBİLER ── -->
+      <div class="tab-content hidden" id="tab-lobbies">
+        <div class="table-toolbar">
+          <h3 style="font-size:1rem;font-weight:700">Aktif Lobiler</h3>
+          <button class="btn btn-secondary btn-sm" onclick="renderLobbiesTab()">
+            <i class="fa-solid fa-rotate"></i> Yenile
+          </button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Lobi ID</th>
+                <th>Lobi Adı</th>
+                <th>Host</th>
+                <th>Oyuncular</th>
+                <th>Süre</th>
+                <th>Gol Sınırı</th>
+                <th>Durum</th>
+                <th>Şifre</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody id="lobbies-tbody"></tbody>
+          </table>
+        </div>
+        <div class="empty-table-msg hidden" id="lobbies-empty">Aktif lobi yok.</div>
+      </div>
+
+      <!-- ── ENVANTERLER ── -->
+      <div class="tab-content hidden" id="tab-inventory">
+        <div class="table-toolbar">
+          <div class="input-wrap" style="max-width:280px">
+            <i class="fa-solid fa-magnifying-glass input-icon"></i>
+            <input class="gz-input" id="inv-search" placeholder="Oyuncu ara..." oninput="renderInventoryTab()"/>
+          </div>
+        </div>
+        <div id="inventory-panels"></div>
+      </div>
+
+      <!-- ── GERİ BİLDİRİMLER ── -->
+      <div class="tab-content hidden" id="tab-feedback">
+        <div class="table-toolbar">
+          <h3 style="font-size:1rem;font-weight:700">Geri Bildirimler</h3>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <select class="gz-select" id="fb-filter-type" onchange="renderFeedbackTab()">
+              <option value="all">Tümü</option>
+              <option value="bug">🐛 Hatalar</option>
+              <option value="suggestion">💡 Öneriler</option>
+              <option value="other">📝 Diğer</option>
+            </select>
+            <select class="gz-select" id="fb-filter-status" onchange="renderFeedbackTab()">
+              <option value="all">Tüm Durumlar</option>
+              <option value="open">Açık</option>
+              <option value="read">Okundu</option>
+              <option value="resolved">Çözüldü</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" onclick="renderFeedbackTab()">
+              <i class="fa-solid fa-rotate"></i>
+            </button>
+          </div>
+        </div>
+        <div id="feedback-list"></div>
+        <div class="empty-table-msg hidden" id="feedback-empty">Henüz geri bildirim yok.</div>
+      </div>
+
+      <!-- ── KASA YÖNETİMİ ── -->
+      <div class="tab-content hidden" id="tab-cases">
+        <div class="case-mgmt-layout">
+
+          <!-- Sol: Kasa Ekle / Düzenle -->
+          <div class="case-form-panel">
+            <h3 class="panel-head"><i class="fa-solid fa-plus"></i> Yeni Kasa Ekle</h3>
+
+            <div class="form-field">
+              <label>Kasa Adı</label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-box input-icon"></i>
+                <input class="gz-input" id="ca-name" placeholder="Efsane Kasa" maxlength="40"/>
+              </div>
+            </div>
+            <div class="case-form-row">
+              <div class="form-field" style="flex:1">
+                <label>Emoji</label>
+                <div class="input-wrap">
+                  <i class="fa-solid fa-face-smile input-icon"></i>
+                  <input class="gz-input" id="ca-emoji" placeholder="📦" maxlength="4"/>
+                </div>
+              </div>
+              <div class="form-field" style="flex:1">
+                <label>Fiyat (🪙)</label>
+                <div class="input-wrap">
+                  <i class="fa-solid fa-coins input-icon"></i>
+                  <input class="gz-input" id="ca-price" type="number" min="1" placeholder="1000"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-field">
+              <label>Açıklama</label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-align-left input-icon"></i>
+                <input class="gz-input" id="ca-desc" placeholder="Kasa açıklaması..."/>
+              </div>
+            </div>
+            <div class="case-form-row">
+              <div class="form-field" style="flex:1">
+                <label>Kategori</label>
+                <select class="gz-input" id="ca-tier" style="padding-left:.9rem">
+                  <option value="basic">Temel</option>
+                  <option value="premium">Premium</option>
+                  <option value="elite" selected>Elit</option>
+                  <option value="legendary">Efsanevi</option>
+                  <option value="ultra">Ultra</option>
+                  <option value="mythic">Mitik</option>
+                  <option value="divine">İlahi</option>
+                  <option value="special">Özel</option>
+                  <option value="event">Etkinlik</option>
+                </select>
+              </div>
+              <div class="form-field" style="flex:1">
+                <label>Glow Rengi</label>
+                <div class="input-wrap">
+                  <i class="fa-solid fa-palette input-icon"></i>
+                  <input class="gz-input" id="ca-glow" placeholder="rgba(124,58,237,.4)"/>
+                </div>
+              </div>
+            </div>
+
+            <h4 style="font-size:.82rem;font-weight:700;color:var(--muted2);margin:1rem 0 .5rem;letter-spacing:.5px">
+              EŞYALAR (en az 5, en fazla 20)
+            </h4>
+            <div id="ca-items-list"></div>
+            <button class="btn btn-secondary btn-sm mt-1" onclick="addCaseItem()" style="width:100%">
+              <i class="fa-solid fa-plus"></i> Eşya Ekle
+            </button>
+
+            <div style="display:flex;gap:.75rem;margin-top:1.25rem">
+              <button class="btn btn-primary" style="flex:1" onclick="saveAdminCase()">
+                <i class="fa-solid fa-floppy-disk"></i> Kasayı Kaydet
+              </button>
+              <button class="btn btn-secondary" onclick="clearCaseForm()">
+                <i class="fa-solid fa-rotate-left"></i> Temizle
+              </button>
+            </div>
+          </div>
+
+          <!-- Sağ: Mevcut Admin Kasaları -->
+          <div class="case-list-panel">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem">
+              <h3 class="panel-head" style="margin:0"><i class="fa-solid fa-list"></i> Admin Kasaları</h3>
+              <span class="muted-label" id="admin-case-count">0 kasa</span>
+            </div>
+            <div id="admin-case-list">
+              <p class="empty-table-msg">Henüz admin kasası yok.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AYARLAR ── -->
+      <div class="tab-content hidden" id="tab-settings">
+        <div class="settings-grid">
+
+          <div class="settings-card">
+            <h3 class="panel-head"><i class="fa-solid fa-coins"></i> Oyuncuya Bakiye Ver</h3>
+            <div class="form-field">
+              <label>Kullanıcı Adı</label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-user input-icon"></i>
+                <input class="gz-input" id="give-user" placeholder="kullanici_adi"/>
+              </div>
+            </div>
+            <div class="form-field mt-2">
+              <label>Miktar (🪙)</label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-coins input-icon"></i>
+                <input class="gz-input" id="give-amount" type="number" min="1" placeholder="1000"/>
+              </div>
+            </div>
+            <button class="btn btn-gold mt-2 btn-full" onclick="giveBalance()">
+              <i class="fa-solid fa-hand-holding-dollar"></i> Bakiye Ver
+            </button>
+          </div>
+
+          <div class="settings-card">
+            <h3 class="panel-head"><i class="fa-solid fa-trash-can"></i> Oyuncu Sil</h3>
+            <p class="text-muted" style="font-size:.85rem;margin-bottom:1rem">
+              Oyuncunun tüm verileri kalıcı olarak silinir!
+            </p>
+            <div class="form-field">
+              <label>Kullanıcı Adı</label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-user input-icon"></i>
+                <input class="gz-input" id="del-user" placeholder="kullanici_adi"/>
+              </div>
+            </div>
+            <button class="btn btn-red mt-2 btn-full" onclick="deleteUser()">
+              <i class="fa-solid fa-user-xmark"></i> Oyuncuyu Sil
+            </button>
+          </div>
+
+          <div class="settings-card">
+            <h3 class="panel-head"><i class="fa-solid fa-broom"></i> Temizlik</h3>
+            <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem">
+              <button class="btn btn-secondary btn-full" onclick="clearAllLobbies()">
+                <i class="fa-solid fa-server"></i> Tüm Lobileri Temizle
+              </button>
+              <button class="btn btn-red btn-full" onclick="resetAllStats()" style="background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)">
+                <i class="fa-solid fa-rotate-left"></i> Tüm İstatistikleri Sıfırla
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3 class="panel-head"><i class="fa-solid fa-circle-info"></i> Sistem Bilgisi</h3>
+            <div id="sys-info" class="sys-info-list"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-panel -->
+
+  <!-- Oyuncu Detay Modal -->
+  <div class="admin-modal hidden" id="player-modal">
+    <div class="modal-card pop-in">
+      <div class="modal-head">
+        <h3 class="orbitron" id="modal-title">Oyuncu Detay</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <div id="gz-toast"></div>
+  <script src="js/auth.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/feedback.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>GlitchGrid — Futbol</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/football.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="js/sw-register.js" defer></script>
+</head>
+<body>
+<header id="navbar" class="navbar"></header>
+
+<main class="fb-page">
+
+  <!-- ══ EKRAN 1: ANA MENÜ ══ -->
+  <div id="screen-lobby" class="screen">
+    <div class="lobby-hero">
+      <h1 class="orbitron gradient-text">2D Futbol</h1>
+      <p class="text-muted">Mod seç, lobi kur, oyna!</p>
+    </div>
+
+    <!-- MOD SEÇİMİ -->
+    <div class="mode-grid" id="mode-grid">
+      <div class="mode-card active" data-mode="1v1" onclick="selectMode('1v1',this)">
+        <div class="mode-icon">👤<span style="font-size:.8rem;vertical-align:middle">VS</span>👤</div>
+        <div class="mode-label orbitron">1 v 1</div>
+        <div class="mode-desc">Klasik — 2 oyuncu</div>
+      </div>
+      <div class="mode-card" data-mode="1vBOT" onclick="selectMode('1vBOT',this)">
+        <div class="mode-icon">👤<span style="font-size:.8rem;vertical-align:middle">VS</span>🤖</div>
+        <div class="mode-label orbitron">Bot'a Karşı</div>
+        <div class="mode-desc">Tek başına oyna</div>
+      </div>
+      <div class="mode-card" data-mode="3v3" onclick="selectMode('3v3',this)">
+        <div class="mode-icon">👥<span style="font-size:.8rem;vertical-align:middle">VS</span>🤖</div>
+        <div class="mode-label orbitron">3 v 3</div>
+        <div class="mode-desc">3 botla karşı karşıya</div>
+      </div>
+      <div class="mode-card" data-mode="5v5" onclick="selectMode('5v5',this)">
+        <div class="mode-icon">👨‍👩‍👦<span style="font-size:.8rem;vertical-align:middle">VS</span>🤖</div>
+        <div class="mode-label orbitron">5 v 5</div>
+        <div class="mode-desc">Büyük takım savaşı</div>
+      </div>
+      <div class="mode-card" data-mode="6v6" onclick="selectMode('6v6',this)">
+        <div class="mode-icon">⚽</div>
+        <div class="mode-label orbitron">6 v 6</div>
+        <div class="mode-desc">Tam saha deneyimi</div>
+      </div>
+    </div>
+
+    <!-- KONTROLLER -->
+    <div class="controls-board" id="controls-board">
+      <div class="ctrl-player ctrl-blue">
+        <div class="ctrl-avatar" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6)">
+          <span id="ctrl-p1-init">P1</span>
+        </div>
+        <div class="ctrl-name orbitron" id="ctrl-p1-name">Sen</div>
+        <div class="ctrl-keys">
+          <div class="key-row"><kbd>W</kbd></div>
+          <div class="key-row"><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div>
+          <div class="ctrl-kick-label"><kbd>Space</kbd> Şut</div>
+        </div>
+      </div>
+      <div class="ctrl-vs orbitron">VS</div>
+      <div class="ctrl-player ctrl-red">
+        <div class="ctrl-avatar" style="background:linear-gradient(135deg,#b91c1c,#ef4444)">🤖</div>
+        <div class="ctrl-name orbitron">Rakip</div>
+        <div class="ctrl-keys">
+          <div class="key-row"><kbd>↑</kbd></div>
+          <div class="key-row"><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></div>
+          <div class="ctrl-kick-label"><kbd>Enter</kbd> Şut</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AYARLAR -->
+    <div class="fb-settings">
+      <div class="setting-row">
+        <label class="setting-label">⏱ Süre</label>
+        <div class="opt-group" id="opt-time">
+          <button class="opt-btn active" data-val="60">1 dk</button>
+          <button class="opt-btn" data-val="120">2 dk</button>
+          <button class="opt-btn" data-val="180">3 dk</button>
+          <button class="opt-btn" data-val="300">5 dk</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">⚽ Gol</label>
+        <div class="opt-group" id="opt-goals">
+          <button class="opt-btn active" data-val="0">Sınırsız</button>
+          <button class="opt-btn" data-val="3">3</button>
+          <button class="opt-btn" data-val="5">5</button>
+          <button class="opt-btn" data-val="10">10</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🤖 Bot Zorluk</label>
+        <div class="opt-group" id="opt-diff">
+          <button class="opt-btn active" data-val="easy">Kolay</button>
+          <button class="opt-btn" data-val="medium">Orta</button>
+          <button class="opt-btn" data-val="hard">Zor</button>
+          <button class="opt-btn" data-val="godlike">Tanrı</button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <label class="setting-label">🏟 Saha</label>
+        <div class="opt-group" id="opt-field">
+          <button class="opt-btn active" data-val="green">Yeşil</button>
+          <button class="opt-btn" data-val="blue">Mavi</button>
+          <button class="opt-btn" data-val="purple">Mor</button>
+          <button class="opt-btn" data-val="dark">Karanlık</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOBİ BÖLÜMÜ -->
+    <div class="lobby-section-wrap">
+      <div class="lobby-list-panel">
+        <div class="panel-header">
+          <h3 class="orbitron" style="font-size:.95rem">Açık Lobiler</h3>
+          <button class="btn btn-secondary btn-sm" onclick="refreshLobbies()">
+            <i class="fa-solid fa-rotate"></i>
+          </button>
+        </div>
+        <div id="lobby-list" class="lobby-list">
+          <p class="no-lobbies-msg">Henüz lobi yok.</p>
+        </div>
+      </div>
+
+      <div class="lobby-create-panel">
+        <div class="form-field">
+          <label>Lobi Adı</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-flag input-icon"></i>
+            <input class="gz-input" id="create-name" placeholder="Süper Maç" maxlength="24"/>
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Şifre <small class="text-muted">(opsiyonel)</small></label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input class="gz-input" id="create-pass" type="password" placeholder="Şifresiz = herkese açık"/>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="createLobby()">
+          <i class="fa-solid fa-plus"></i> Lobi Oluştur
+        </button>
+        <div style="margin-top:.75rem;display:flex;gap:.5rem">
+          <div class="input-wrap" style="flex:1">
+            <i class="fa-solid fa-hashtag input-icon"></i>
+            <input class="gz-input" id="join-id" placeholder="Lobi ID ile katıl"/>
+          </div>
+          <button class="btn btn-secondary" onclick="joinLobbyById()">Katıl</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-lg fb-start-btn" onclick="startSoloGame()">
+      <i class="fa-solid fa-play"></i> HEMEN OYNA (Solo/Bot)
+    </button>
+  </div>
+
+  <!-- ══ EKRAN 2: BEKLEME ODASI ══ -->
+  <div id="screen-waiting" class="screen hidden">
+    <div class="waiting-card">
+      <div class="waiting-header">
+        <div>
+          <h2 class="orbitron" id="wait-lobby-name">Lobi</h2>
+          <p class="text-muted" id="wait-lobby-id"></p>
+        </div>
+        <button class="btn btn-red btn-sm" onclick="leaveLobby()">
+          <i class="fa-solid fa-door-open"></i> Çık
+        </button>
+      </div>
+      <div class="waiting-players" id="waiting-players-list"></div>
+      <div class="waiting-info">
+        <div class="winfo-item"><span>Mod</span><b id="wait-mode">—</b></div>
+        <div class="winfo-item"><span>Süre</span><b id="wait-time">—</b></div>
+        <div class="winfo-item"><span>Gol</span><b id="wait-goals">—</b></div>
+        <div class="winfo-item"><span>Zorluk</span><b id="wait-diff">—</b></div>
+      </div>
+      <div class="waiting-share">
+        <span class="text-muted" style="font-size:.82rem">ID:</span>
+        <code id="wait-share-id" class="lobby-id-code">—</code>
+        <button class="btn btn-secondary btn-sm" onclick="copyLobbyId()">
+          <i class="fa-solid fa-copy"></i>
+        </button>
+      </div>
+      <button class="btn btn-primary btn-full mt-3" id="start-game-btn" onclick="startGameFromLobby()" disabled>
+        <i class="fa-solid fa-play"></i> Başlat <span id="start-hint"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ EKRAN 3: OYUN ══ -->
+  <div id="screen-game" class="screen hidden">
+    <div class="scoreboard" id="scoreboard">
+      <div class="sb-team sb-left">
+        <div class="sb-avatar blue-av" id="sb-av1">🔵</div>
+        <span class="sb-name" id="sb-name1">Mavi</span>
+        <span class="sb-score" id="sb-score1">0</span>
+      </div>
+      <div class="sb-center">
+        <div class="sb-timer" id="sb-timer">—</div>
+        <div class="sb-mode-badge" id="sb-mode-badge">1v1</div>
+      </div>
+      <div class="sb-team sb-right">
+        <span class="sb-score" id="sb-score2">0</span>
+        <span class="sb-name" id="sb-name2">Kırmızı</span>
+        <div class="sb-avatar red-av" id="sb-av2">🔴</div>
+      </div>
+    </div>
+
+    <!-- Güç barları -->
+    <div class="power-bars">
+      <div class="power-bar-wrap power-left">
+        <span class="power-label">ŞUT</span>
+        <div class="power-bar-outer"><div class="power-bar-inner" id="power-bar-1" style="width:0%"></div></div>
+        <span class="power-key"><kbd>Space</kbd></span>
+      </div>
+      <div class="power-bar-wrap power-right">
+        <span class="power-key"><kbd>Enter</kbd></span>
+        <div class="power-bar-outer"><div class="power-bar-inner" id="power-bar-2" style="width:0%"></div></div>
+        <span class="power-label">ŞUT</span>
+      </div>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="gameCanvas"></canvas>
+      <div class="goal-banner hidden" id="goal-banner"><span id="goal-text">GOL!</span></div>
+      <div class="pause-overlay hidden" id="pause-overlay">
+        <div class="pause-box orbitron">⏸ DURAKLATILDI</div>
+      </div>
+    </div>
+
+    <div class="game-bar">
+      <button class="btn btn-secondary btn-sm" onclick="togglePause()" id="pause-btn">⏸ Durdur</button>
+      <div class="ctrl-hint">
+        <span>🔵 WASD + <kbd>Space</kbd></span>
+        <span>🔴 ↑↓←→ + <kbd>Enter</kbd></span>
+      </div>
+      <button class="btn btn-secondary btn-sm" onclick="abandonGame()">🏠 Menü</button>
+    </div>
+  </div>
+
+  <!-- ══ EKRAN 4: OYUN SONU ══ -->
+  <div id="screen-gameover" class="screen hidden">
+    <div class="go-card pop-in">
+      <div class="go-trophy" id="go-trophy">🏆</div>
+      <h2 class="go-winner orbitron gradient-text" id="go-winner">Kazanan!</h2>
+      <div class="go-score" id="go-score">0 — 0</div>
+      <div class="go-details" id="go-details"></div>
+      <div class="go-btns">
+        <button class="btn btn-primary" onclick="rematch()"><i class="fa-solid fa-rotate"></i> Tekrar</button>
+        <button class="btn btn-secondary" onclick="backToMenu()"><i class="fa-solid fa-house"></i> Menü</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Mobil dokunmatik kontroller -->
+<div class="touch-controls" id="touch-controls">
+  <div class="touch-dpad" id="dpad-p1">
+    <div class="dpad-btn dpad-up"    id="tc-p1-up">▲</div>
+    <div class="dpad-btn dpad-left"  id="tc-p1-left">◀</div>
+    <div class="dpad-btn dpad-right" id="tc-p1-right">▶</div>
+    <div class="dpad-btn dpad-down"  id="tc-p1-down">▼</div>
+  </div>
+  <div style="flex:1"></div>
+  <div class="touch-dpad-2" id="dpad-p2">
+    <div class="dpad-btn dpad-up"    id="tc-p2-up">▲</div>
+    <div class="dpad-btn dpad-left"  id="tc-p2-left">◀</div>
+    <div class="dpad-btn dpad-right" id="tc-p2-right">▶</div>
+    <div class="dpad-btn dpad-down"  id="tc-p2-down">▼</div>
+  </div>
+</div>
+<div id="touch-shoot-btns" style="display:none;position:fixed;bottom:1rem;z-index:401;width:100%;pointer-events:none;padding:0 .75rem">
+  <div style="display:flex;justify-content:space-between;pointer-events:all">
+    <div class="touch-shoot-btn" id="tc-p1-shoot" style="background:rgba(59,130,246,.22);border-color:rgba(59,130,246,.4)">ŞUT🔵</div>
+    <div class="touch-shoot-btn" id="tc-p2-shoot" style="background:rgba(239,68,68,.22);border-color:rgba(239,68,68,.4)">ŞUT🔴</div>
+  </div>
+</div>
+
+<div id="gz-toast"></div>
+<script src="js/auth.js"></script>
+<script src="js/music.js"></script>
+<script src="js/feedback.js"></script>
+<script src="js/football.js"></script>
+</body>
+</html>

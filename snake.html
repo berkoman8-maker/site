@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>GlitchGrid — Yılan</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="css/snake.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="js/sw-register.js" defer></script>
+</head>
+<body>
+<header id="navbar" class="navbar"></header>
+
+<main class="snake-page">
+
+  <!-- ══ MENÜ ══ -->
+  <div id="snake-menu" class="snake-screen">
+    <div class="snake-hero">
+      <div class="snake-logo">🐍</div>
+      <h1 class="orbitron gradient-text">YILAN</h1>
+      <p class="text-muted">Yemi ye, büyü, kendi kendine çarpma!</p>
+    </div>
+
+    <div class="snake-menu-card">
+      <!-- Zorluk -->
+      <div class="snake-setting">
+        <label class="snake-setting-label">Hız</label>
+        <div class="opt-group" id="speed-opts">
+          <button class="opt-btn" data-val="6">Yavaş</button>
+          <button class="opt-btn active" data-val="10">Normal</button>
+          <button class="opt-btn" data-val="16">Hızlı</button>
+          <button class="opt-btn" data-val="24">Turbo</button>
+        </div>
+      </div>
+
+      <!-- Saha boyutu -->
+      <div class="snake-setting">
+        <label class="snake-setting-label">Saha</label>
+        <div class="opt-group" id="size-opts">
+          <button class="opt-btn" data-val="15">Küçük</button>
+          <button class="opt-btn active" data-val="20">Orta</button>
+          <button class="opt-btn" data-val="30">Büyük</button>
+        </div>
+      </div>
+
+      <!-- Tema -->
+      <div class="snake-setting">
+        <label class="snake-setting-label">Tema</label>
+        <div class="opt-group" id="theme-opts">
+          <button class="opt-btn active" data-val="classic">Klasik</button>
+          <button class="opt-btn" data-val="neon">Neon</button>
+          <button class="opt-btn" data-val="lava">Lav</button>
+          <button class="opt-btn" data-val="ice">Buz</button>
+        </div>
+      </div>
+
+      <!-- Duvardan geç -->
+      <div class="snake-setting">
+        <label class="snake-setting-label">Duvar</label>
+        <div class="opt-group" id="wall-opts">
+          <button class="opt-btn active" data-val="death">Ölüm</button>
+          <button class="opt-btn" data-val="wrap">Geçiş</button>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full snake-start-btn" onclick="startSnake()">
+        <i class="fa-solid fa-play"></i> OYNA
+      </button>
+
+      <!-- En yüksek skorlar -->
+      <div class="snake-highscores" id="snake-highscores"></div>
+    </div>
+  </div>
+
+  <!-- ══ OYUN ══ -->
+  <div id="snake-game" class="snake-screen hidden">
+    <!-- HUD -->
+    <div class="snake-hud">
+      <div class="snake-hud-item">
+        <span class="snake-hud-label">SKOR</span>
+        <span class="snake-hud-val" id="snake-score">0</span>
+      </div>
+      <div class="snake-hud-item">
+        <span class="snake-hud-label">EN YÜKSEK</span>
+        <span class="snake-hud-val" id="snake-best">0</span>
+      </div>
+      <div class="snake-hud-item">
+        <span class="snake-hud-label">SEVİYE</span>
+        <span class="snake-hud-val" id="snake-level">1</span>
+      </div>
+      <div class="snake-hud-btns">
+        <button class="snake-icon-btn" onclick="toggleSnakePause()" id="snake-pause-btn" title="Durdur">⏸</button>
+        <button class="snake-icon-btn" onclick="quitSnake()" title="Çık">🏠</button>
+      </div>
+    </div>
+
+    <!-- Canvas -->
+    <div class="snake-canvas-wrap">
+      <canvas id="snakeCanvas"></canvas>
+      <!-- Duraklat overlay -->
+      <div class="snake-pause-overlay hidden" id="snake-pause-overlay">
+        <div class="snake-pause-box orbitron">⏸ DURAKLATILDI</div>
+        <p class="text-muted" style="margin-top:.5rem">SPACE / Ekrana dokun</p>
+      </div>
+    </div>
+
+    <!-- Mobil kontroller -->
+    <div class="snake-touch-pad" id="snake-touch-pad">
+      <div class="snake-dpad">
+        <button class="sdpad-btn sdpad-up"    onclick="snakeTurn('up')">▲</button>
+        <button class="sdpad-btn sdpad-left"  onclick="snakeTurn('left')">◀</button>
+        <button class="sdpad-btn sdpad-center"></button>
+        <button class="sdpad-btn sdpad-right" onclick="snakeTurn('right')">▶</button>
+        <button class="sdpad-btn sdpad-down"  onclick="snakeTurn('down')">▼</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ OYUN SONU ══ -->
+  <div id="snake-gameover" class="snake-screen hidden">
+    <div class="snake-go-card pop-in">
+      <div class="snake-go-emoji" id="snake-go-emoji">💀</div>
+      <h2 class="orbitron" id="snake-go-title">OYUN BİTTİ</h2>
+      <div class="snake-go-score">
+        <div class="snake-go-stat">
+          <span>Skor</span>
+          <b id="go-score">0</b>
+        </div>
+        <div class="snake-go-stat">
+          <span>En Yüksek</span>
+          <b id="go-best">0</b>
+        </div>
+        <div class="snake-go-stat">
+          <span>Uzunluk</span>
+          <b id="go-length">0</b>
+        </div>
+        <div class="snake-go-stat">
+          <span>Seviye</span>
+          <b id="go-level">1</b>
+        </div>
+      </div>
+      <div id="go-reward" class="snake-go-reward"></div>
+      <div class="snake-go-btns">
+        <button class="btn btn-primary" onclick="startSnake()">
+          <i class="fa-solid fa-rotate"></i> Tekrar
+        </button>
+        <button class="btn btn-secondary" onclick="showSnakeMenu()">
+          <i class="fa-solid fa-house"></i> Menü
+        </button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="gz-toast"></div>
+<script src="js/auth.js"></script>
+<script src="js/music.js"></script>
+<script src="js/feedback.js"></script>
+<script src="js/snake.js"></script>
+</body>
+</html>

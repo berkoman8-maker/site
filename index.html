@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>GlitchGrid — Giriş Yap</title>
+  <link rel="stylesheet" href="css/global.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="js/sw-register.js" defer></script>
+</head>
+<body class="auth-body">
+
+  <div class="auth-bg" id="auth-bg"></div>
+
+  <!-- ══════════════════════════════
+       CİHAZ SEÇİM EKRANI
+  ══════════════════════════════ -->
+  <div id="device-screen" class="device-screen hidden">
+    <div class="device-card pop-in">
+      <div class="device-logo orbitron gradient-text">GlitchGrid</div>
+      <p class="device-desc">Nasıl oynamak istiyorsun?</p>
+      <div class="device-options">
+        <button class="device-btn desktop-btn" onclick="chooseDevice('desktop')">
+          <span class="device-icon">🖥️</span>
+          <span class="device-label">Masaüstü</span>
+          <span class="device-hint">Klavye ile tam deneyim</span>
+        </button>
+        <button class="device-btn mobile-btn" onclick="chooseDevice('mobile')">
+          <span class="device-icon">📱</span>
+          <span class="device-label">Mobil</span>
+          <span class="device-hint">Dokunmatik kontroller</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       GİRİŞ / KAYIT EKRANI
+  ══════════════════════════════ -->
+  <div id="auth-screen" class="hidden">
+    <div class="auth-logo gradient-text orbitron">GlitchGrid</div>
+
+    <div class="auth-card pop-in" id="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login"    onclick="switchTab('login')">Giriş Yap</button>
+        <button class="auth-tab"        id="tab-register" onclick="switchTab('register')">Kayıt Ol</button>
+      </div>
+
+      <!-- GİRİŞ -->
+      <form id="form-login" class="auth-form" onsubmit="doLogin(event)">
+        <h2 class="auth-title">Tekrar Hoş Geldin!</h2>
+        <p class="auth-sub">Hesabına giriş yap ve oynamaya devam et.</p>
+
+        <div class="form-field">
+          <label>Kullanıcı Adı</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input class="gz-input" id="login-user" type="text" placeholder="kullanici_adi"
+                   autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"/>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Şifre</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input class="gz-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password"/>
+            <button type="button" class="pass-toggle" onclick="togglePass('login-pass',this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-error hidden" id="login-err"></div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg mt-3">
+          <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+        </button>
+
+        <p class="auth-switch">
+          Hesabın yok mu? <a href="#" onclick="switchTab('register')">Kayıt Ol!</a>
+        </p>
+      </form>
+
+      <!-- KAYIT -->
+      <form id="form-register" class="auth-form hidden" onsubmit="doRegister(event)">
+        <h2 class="auth-title">Hesap Oluştur</h2>
+        <p class="auth-sub">Ücretsiz kayıt ol, 1000 🪙 başlangıç parası kazan!</p>
+
+        <div class="form-field">
+          <label>Kullanıcı Adı</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input class="gz-input" id="reg-user" type="text" placeholder="kullanici_adi"
+                   autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"/>
+          </div>
+          <span class="field-hint">3-20 karakter, harf/rakam/_</span>
+        </div>
+
+        <div class="form-field">
+          <label>Şifre</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input class="gz-input" id="reg-pass" type="password" placeholder="••••••••" autocomplete="new-password"/>
+            <button type="button" class="pass-toggle" onclick="togglePass('reg-pass',this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <span class="field-hint">En az 4 karakter</span>
+        </div>
+
+        <div class="form-field">
+          <label>Şifre Tekrar</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input class="gz-input" id="reg-pass2" type="password" placeholder="••••••••" autocomplete="new-password"/>
+          </div>
+        </div>
+
+        <div class="form-error hidden" id="reg-err"></div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg mt-3">
+          <i class="fa-solid fa-user-plus"></i> Kayıt Ol
+        </button>
+
+        <p class="auth-switch">
+          Zaten hesabın var mı? <a href="#" onclick="switchTab('login')">Giriş Yap!</a>
+        </p>
+      </form>
+    </div>
+
+    <p class="auth-footer-note">© 2026 GlitchGrid — Tüm hakları saklıdır.</p>
+  </div>
+
+  <div id="gz-toast"></div>
+  <script src="js/auth.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/feedback.js"></script>
+  <script>
+    /* Zaten oturum açıksa yönlendir */
+    if (GZ.getSession()) window.location.href = 'menu.html';
+
+    /* Cihaz tercihi */
+    function chooseDevice(type) {
+      localStorage.setItem('gz_device', type);
+      document.getElementById('device-screen').classList.add('hidden');
+      document.getElementById('auth-screen').classList.remove('hidden');
+      buildParticles();
+    }
+
+    /* İlk açılış: cihaz sorulmuş mu? */
+    const savedDevice = localStorage.getItem('gz_device');
+    if (savedDevice) {
+      document.getElementById('device-screen').classList.add('hidden');
+      document.getElementById('auth-screen').classList.remove('hidden');
+      buildParticles();
+    } else {
+      document.getElementById('device-screen').classList.remove('hidden');
+    }
+
+    /* Partikül arka plan */
+    function buildParticles() {
+      const bg = document.getElementById('auth-bg');
+      bg.innerHTML = '';
+      for (let i = 0; i < 22; i++) {
+        const p = document.createElement('div');
+        p.className = 'auth-particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.width = p.style.height = (Math.random() * 4 + 2) + 'px';
+        p.style.animationDuration = (Math.random() * 18 + 10) + 's';
+        p.style.animationDelay    = (Math.random() * 12) + 's';
+        p.style.opacity = (Math.random() * 0.4 + 0.05).toString();
+        bg.appendChild(p);
+      }
+    }
+
+    /* Sekme */
+    function switchTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tab-login').classList.toggle('active', isLogin);
+      document.getElementById('tab-register').classList.toggle('active', !isLogin);
+      document.getElementById('form-login').classList.toggle('hidden', !isLogin);
+      document.getElementById('form-register').classList.toggle('hidden', isLogin);
+      clearErrors();
+    }
+
+    function showErr(id, msg) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+    function clearErrors() {
+      ['login-err','reg-err'].forEach(id => {
+        const el = document.getElementById(id);
+        el.textContent = '';
+        el.classList.add('hidden');
+      });
+    }
+
+    function togglePass(inputId, btn) {
+      const inp  = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      inp.type   = inp.type === 'password' ? 'text' : 'password';
+      icon.className = inp.type === 'text' ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+    }
+
+    /* GİRİŞ — admin kontrolü dahil */
+    function doLogin(e) {
+      e.preventDefault();
+      clearErrors();
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      if (!user || !pass) { showErr('login-err','Tüm alanları doldur.'); return; }
+
+      /* Admin girişi */
+      if (user.toLowerCase() === 'admin') {
+        const res = GZ.adminLogin(user, pass);
+        if (!res.ok) { showErr('login-err', res.msg); return; }
+        gz_toast('Admin paneline yönlendiriliyorsun 🛡️', 'info');
+        setTimeout(() => window.location.href = 'admin.html', 800);
+        return;
+      }
+
+      /* Normal giriş */
+      const res = GZ.login(user, pass);
+      if (!res.ok) { showErr('login-err', res.msg); return; }
+      gz_toast('Hoş geldin, ' + user + '! 🎮', 'success');
+      setTimeout(() => window.location.href = 'menu.html', 700);
+    }
+
+    /* KAYIT */
+    function doRegister(e) {
+      e.preventDefault();
+      clearErrors();
+      const user  = document.getElementById('reg-user').value.trim();
+      const pass  = document.getElementById('reg-pass').value;
+      const pass2 = document.getElementById('reg-pass2').value;
+      if (!user || !pass || !pass2) { showErr('reg-err','Tüm alanları doldur.'); return; }
+      if (pass !== pass2) { showErr('reg-err','Şifreler eşleşmiyor.'); return; }
+      const res = GZ.register(user, pass);
+      if (!res.ok) { showErr('reg-err', res.msg); return; }
+      GZ.login(user, pass);
+      gz_toast('Hesap oluşturuldu! 1000 🪙 hediye!', 'success');
+      setTimeout(() => window.location.href = 'menu.html', 800);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+﻿/* =====================================================
+   FOOTBALL.CSS — GlitchGrid Futbol
+===================================================== */
+.fb-page {
+  padding-top: 60px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Her ekran max genişliği */
+.screen {
+  width: 100%;
+  max-width: 1060px;
+  padding: 1.25rem 1rem;
+  box-sizing: border-box;
+}
+
+/* ══════════════════════════════════════
+   LOBİ MENÜSÜ
+══════════════════════════════════════ */
+.lobby-hero { text-align:center; padding: 1.75rem 1rem 1.25rem; }
+.lobby-hero h1 { font-size:clamp(1.8rem,5vw,3rem); font-weight:900; margin-bottom:.4rem; }
+.lobby-hero p  { color:var(--muted2); font-size:.95rem; }
+
+/* Mod kartları */
+.mode-grid {
+  display: flex;
+  gap: .6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.mode-card {
+  background: var(--card);
+  border: 2px solid var(--border2);
+  border-radius: 12px;
+  padding: .85rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  min-width: 100px;
+  flex: 1;
+  max-width: 160px;
+}
+.mode-card:hover  { border-color:var(--primary); transform:translateY(-2px); }
+.mode-card.active { border-color:var(--primary2); background:rgba(124,58,237,.15); box-shadow:0 0 14px rgba(124,58,237,.25); }
+.mode-icon  { font-size:1.5rem; margin-bottom:.35rem; }
+.mode-label { font-size:.8rem; font-weight:700; margin-bottom:.18rem; }
+.mode-desc  { font-size:.68rem; color:var(--muted2); }
+
+/* Kontroller */
+.controls-board {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap;
+}
+.ctrl-player {
+  background: var(--card); border-radius: 14px;
+  padding: 1rem 1.25rem; border: 1.5px solid var(--border2);
+  min-width: 130px; text-align: center;
+}
+.ctrl-blue { border-color:rgba(59,130,246,.4); box-shadow:0 0 12px rgba(59,130,246,.08); }
+.ctrl-red  { border-color:rgba(239,68,68,.4);  box-shadow:0 0 12px rgba(239,68,68,.08); }
+.ctrl-avatar {
+  width:44px; height:44px; border-radius:50%; margin:0 auto .6rem;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:900; color:#fff; font-size:.88rem;
+  box-shadow:0 3px 8px rgba(0,0,0,.3);
+}
+.ctrl-name  { font-family:'Orbitron',sans-serif; font-size:.78rem; font-weight:700; margin-bottom:.75rem; }
+.ctrl-keys  { display:flex; flex-direction:column; gap:.32rem; align-items:center; }
+.key-row    { display:flex; gap:.28rem; }
+kbd {
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--bg3); border:1px solid var(--border2); border-bottom:3px solid var(--border2);
+  border-radius:5px; padding:.25rem .45rem;
+  font-family:'Rajdhani',sans-serif; font-size:.75rem; font-weight:700; color:var(--text); min-width:24px;
+}
+.ctrl-kick-label { margin-top:.32rem; font-size:.7rem; color:var(--muted2); font-weight:600; }
+.ctrl-kick-label kbd { font-size:.68rem; padding:.18rem .38rem; }
+.ctrl-vs { font-size:1.6rem; font-weight:900; color:var(--muted); font-family:'Orbitron',sans-serif; }
+
+/* Ayarlar */
+.fb-settings {
+  display:flex; flex-direction:column; gap:.72rem;
+  max-width:600px; margin:0 auto 1.25rem;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:13px; padding:1.1rem 1.25rem;
+}
+.setting-row    { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; }
+.setting-label  { font-weight:700; color:var(--muted2); font-size:.85rem; min-width:85px; }
+.opt-group      { display:flex; gap:.38rem; flex-wrap:wrap; }
+.opt-btn {
+  background:var(--bg3); border:1px solid var(--border2); color:var(--muted2);
+  padding:.3rem .75rem; border-radius:7px; cursor:pointer;
+  font-family:'Rajdhani',sans-serif; font-size:.83rem; font-weight:700; transition:all .18s;
+}
+.opt-btn:hover  { border-color:var(--primary); color:var(--text); }
+.opt-btn.active { background:var(--primary); border-color:var(--primary); color:#fff; box-shadow:0 0 8px rgba(124,58,237,.3); }
+
+/* Lobi bölümü */
+.lobby-section-wrap {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1rem;
+  max-width: 860px;
+  margin: 0 auto 1.25rem;
+}
+.lobby-list-panel {
+  background:var(--card); border:1px solid var(--border2); border-radius:14px; padding:1rem; min-height:160px;
+}
+.panel-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.65rem; }
+.lobby-list   { display:flex; flex-direction:column; gap:.5rem; }
+.no-lobbies-msg { text-align:center; color:var(--muted); padding:1.5rem; font-size:.85rem; }
+.lobby-row {
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--bg3); border:1px solid var(--border); border-radius:9px; padding:.65rem .85rem;
+  transition:border-color .2s; flex-wrap:wrap; gap:.38rem;
+}
+.lobby-row:hover { border-color:var(--primary); }
+.lobby-row-name { font-weight:700; font-size:.88rem; display:flex; align-items:center; gap:.38rem; }
+.mode-pill {
+  font-family:'Orbitron',sans-serif; font-size:.58rem; font-weight:700;
+  background:rgba(124,58,237,.2); color:var(--primary2); border-radius:4px; padding:.08rem .4rem;
+}
+.lobby-row-sub     { font-size:.72rem; color:var(--muted2); margin-top:.12rem; }
+.lobby-row-actions { display:flex; align-items:center; gap:.4rem; }
+.lobby-full-badge  { font-size:.65rem; font-weight:700; background:rgba(239,68,68,.18); color:#fca5a5; border:1px solid rgba(239,68,68,.28); border-radius:5px; padding:.12rem .45rem; }
+.lobby-lock-icon   { color:var(--gold); font-size:.8rem; }
+.player-count-badge{ font-size:.7rem; font-weight:700; color:var(--muted2); }
+
+.lobby-create-panel {
+  background:var(--card); border:1px solid var(--border2); border-radius:14px; padding:1rem;
+  display:flex; flex-direction:column; gap:.65rem;
+}
+
+.fb-start-btn {
+  display:block; margin:0 auto 1.25rem;
+  font-family:'Orbitron',sans-serif; font-size:.95rem; letter-spacing:1.5px; padding:.95rem 3rem;
+}
+
+/* ══════════════════════════════════════
+   BEKLEME ODASI
+══════════════════════════════════════ */
+#screen-waiting { display:flex; justify-content:center; }
+.waiting-card {
+  background:var(--card); border:1px solid var(--border2); border-radius:18px;
+  padding:1.5rem 2rem; width:100%; max-width:500px;
+}
+.waiting-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.25rem; }
+.waiting-header h2 { font-size:1.2rem; font-weight:900; margin-bottom:.2rem; }
+.waiting-players { display:flex; flex-wrap:wrap; gap:.65rem; justify-content:center; margin-bottom:1.25rem; }
+.wait-player-slot { display:flex; flex-direction:column; align-items:center; gap:.38rem; min-width:75px; }
+.wait-avatar {
+  width:54px; height:54px; border-radius:50%;
+  background:var(--bg3); border:2px dashed var(--border2);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Orbitron',sans-serif; font-size:.95rem; font-weight:900; color:var(--muted); transition:all .3s;
+}
+.wait-avatar.filled { border-style:solid; color:#fff; }
+.wait-name  { font-size:.78rem; font-weight:700; text-align:center; }
+.wait-badge { font-size:.6rem; font-weight:700; padding:.16rem .48rem; border-radius:5px; }
+.host-badge { background:rgba(245,158,11,.2); color:var(--gold); border:1px solid rgba(245,158,11,.28); }
+.waiting-info {
+  display:flex; justify-content:center; gap:1.25rem; flex-wrap:wrap;
+  background:var(--bg3); border-radius:10px; padding:.7rem; margin-bottom:.95rem;
+}
+.winfo-item { text-align:center; font-size:.82rem; }
+.winfo-item span { display:block; color:var(--muted2); font-size:.7rem; margin-bottom:.16rem; }
+.winfo-item b    { color:var(--text); }
+.waiting-share {
+  display:flex; align-items:center; gap:.6rem;
+  background:var(--bg3); border-radius:8px; padding:.55rem .85rem; margin-bottom:.95rem;
+}
+.lobby-id-code {
+  font-family:'Orbitron',sans-serif; font-size:.72rem; color:var(--cyan);
+  background:rgba(6,182,212,.1); padding:.16rem .5rem; border-radius:4px;
+  border:1px solid rgba(6,182,212,.2); flex:1;
+}
+
+/* ══════════════════════════════════════
+   OYUN EKRANI
+══════════════════════════════════════ */
+#screen-game {
+  padding: .5rem .5rem 0;
+  max-width: 980px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Skor */
+.scoreboard {
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--card); border:1px solid var(--border2); border-radius:12px;
+  padding:.55rem 1rem; margin-bottom:.5rem;
+}
+.sb-team  { display:flex; align-items:center; gap:.5rem; }
+.sb-left  { flex:1; }
+.sb-right { flex:1; flex-direction:row-reverse; }
+.sb-avatar {
+  width:28px; height:28px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.65rem; font-weight:900; color:#fff; flex-shrink:0;
+}
+.blue-av { background:linear-gradient(135deg,#1d4ed8,#3b82f6); }
+.red-av  { background:linear-gradient(135deg,#b91c1c,#ef4444); }
+.sb-name  { font-size:.8rem; font-weight:700; color:var(--muted2); }
+.sb-score {
+  font-family:'Orbitron',sans-serif; font-size:1.8rem; font-weight:900;
+  color:var(--text); min-width:24px; text-align:center;
+}
+.sb-center { display:flex; flex-direction:column; align-items:center; gap:.18rem; }
+.sb-timer {
+  font-family:'Orbitron',sans-serif; font-size:1.4rem; font-weight:900; color:var(--gold);
+  background:rgba(245,158,11,.1); border:1px solid rgba(245,158,11,.2); padding:.18rem .8rem; border-radius:8px;
+}
+.sb-timer.danger { color:var(--red); background:rgba(239,68,68,.1); border-color:rgba(239,68,68,.25); }
+.sb-mode-badge {
+  font-family:'Orbitron',sans-serif; font-size:.58rem; font-weight:700;
+  background:rgba(124,58,237,.2); color:var(--primary2); border-radius:4px; padding:.08rem .42rem;
+}
+
+/* Güç barları */
+.power-bars { display:flex; justify-content:space-between; gap:.4rem; margin-bottom:.5rem; }
+.power-bar-wrap { display:flex; align-items:center; gap:.38rem; flex:1; }
+.power-bar-outer { flex:1; height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; border:1px solid var(--border); }
+.power-bar-inner { height:100%; border-radius:3px; transition:width .05s; background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444); }
+.power-label { font-size:.6rem; font-weight:700; letter-spacing:1px; color:var(--muted2); flex-shrink:0; }
+.power-key kbd { font-size:.6rem; padding:.1rem .32rem; }
+
+/* Canvas — kritik: mobilde tam genişlik, oran korunur */
+.canvas-wrap {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 32px rgba(0,0,0,.55);
+  width: 100%;
+  line-height: 0; /* img-like gap kaldır */
+}
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: auto; /* aspect ratio canvas'ın kendi attribute'undan gelir */
+  max-width: 100%;
+}
+
+/* Gol banner */
+.goal-banner {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.45);
+}
+.goal-banner span {
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(2rem,7vw,5rem);
+  font-weight:900; color:#fff;
+  text-shadow:0 0 25px rgba(245,158,11,1);
+  animation:goal-pop .35s cubic-bezier(.34,1.56,.64,1);
+}
+/* Durdur overlay */
+.pause-overlay {
+  position:absolute; inset:0;
+  background:rgba(0,0,0,.52); backdrop-filter:blur(4px);
+  display:flex; align-items:center; justify-content:center;
+}
+.pause-box { font-size:1.75rem; font-weight:900; color:#fff; letter-spacing:3px; }
+
+/* Alt bar */
+.game-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:.45rem 0; flex-wrap:wrap; gap:.4rem;
+}
+.ctrl-hint {
+  display:flex; gap:1rem; font-size:.72rem; color:var(--muted2);
+  font-weight:600; flex-wrap:wrap; justify-content:center;
+}
+.ctrl-hint kbd { font-size:.65rem; padding:.1rem .32rem; }
+
+/* ══════════════════════════════════════
+   OYUN SONU
+══════════════════════════════════════ */
+#screen-gameover {
+  display:flex; align-items:center; justify-content:center;
+  min-height: calc(100vh - 60px);
+}
+.go-card {
+  background:var(--card2); border:2px solid rgba(245,158,11,.3); border-radius:20px;
+  padding:2.5rem 2rem; text-align:center; max-width:380px; width:90%;
+  box-shadow:0 0 60px rgba(0,0,0,.6), 0 0 30px rgba(245,158,11,.1);
+}
+.go-trophy  { font-size:4.5rem; margin-bottom:.65rem; }
+.go-winner  { font-size:1.4rem; font-weight:900; margin-bottom:.65rem; }
+.go-score   { font-family:'Orbitron',sans-serif; font-size:3rem; font-weight:900; color:var(--text); margin-bottom:.85rem; }
+.go-details { display:flex; justify-content:center; gap:1.25rem; margin-bottom:1.25rem; flex-wrap:wrap; }
+.go-detail  { font-size:.83rem; color:var(--muted2); font-weight:700; }
+.go-detail b{ color:var(--text); }
+.go-btns    { display:flex; gap:.7rem; justify-content:center; }
+
+/* ══════════════════════════════════════
+   MOBİL DOKUNMATİK KONTROLLER
+══════════════════════════════════════ */
+.touch-controls {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 400;
+  pointer-events: none;
+  /* Oyun canvas'ının altına ekle, padding ile gerekli boşluk bırak */
+  padding: .4rem .6rem env(safe-area-inset-bottom, .5rem);
+  background: linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 100%);
+}
+.touch-controls.active {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+/* D-pad */
+.touch-dpad,
+.touch-dpad-2 {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  pointer-events: all;
+  flex-shrink: 0;
+}
+.dpad-btn {
+  position: absolute;
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,.14);
+  border: 1.5px solid rgba(255,255,255,.22);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.05rem; color: #fff;
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none;
+  touch-action: none;
+  transition: background .08s;
+  /* Dokunma alanını büyüt */
+  -webkit-tap-highlight-color: transparent;
+}
+.dpad-btn:active,
+.dpad-btn.pressed { background: rgba(255,255,255,.35); }
+
+.dpad-up    { top: 0;    left: 43px; }
+.dpad-down  { bottom: 0; left: 43px; }
+.dpad-left  { top: 43px; left: 0; }
+.dpad-right { top: 43px; right: 0; }
+
+/* Orta boş alan */
+.touch-dpad::after,
+.touch-dpad-2::after {
+  content: '';
+  position: absolute;
+  top: 43px; left: 43px;
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,.04);
+  border-radius: 8px;
+}
+
+/* Şut butonu */
+.touch-shoot-btn {
+  width: 62px; height: 62px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none;
+  touch-action: none;
+  color: #fff;
+  font-size: .68rem; font-weight: 700;
+  text-align: center; letter-spacing: .3px;
+  border: 2px solid;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .08s;
+}
+.touch-shoot-btn:active,
+.touch-shoot-btn.charging {
+  transform: scale(.92);
+  box-shadow: 0 0 16px rgba(255,255,255,.5);
+}
+
+/* ══════════════════════════════════════
+   ANİMASYONLAR
+══════════════════════════════════════ */
+@keyframes goal-pop {
+  0%   { transform: scale(.3) rotate(-8deg); opacity:0; }
+  100% { transform: scale(1)  rotate(0);     opacity:1; }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — TABLET
+══════════════════════════════════════ */
+@media (max-width: 860px) {
+  .lobby-section-wrap { grid-template-columns: 1fr; }
+  .mode-card { min-width: 85px; }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — MOBİL
+══════════════════════════════════════ */
+@media (max-width: 640px) {
+  .screen { padding: .5rem .5rem; }
+
+  /* Menü */
+  .lobby-hero { padding: 1.25rem .75rem 1rem; }
+  .mode-grid  { gap: .4rem; }
+  .mode-card  { min-width: 72px; padding: .65rem .5rem; }
+  .mode-icon  { font-size: 1.3rem; }
+  .mode-label { font-size: .72rem; }
+  .mode-desc  { display: none; }
+
+  /* Kontroller */
+  .controls-board { gap: .6rem; }
+  .ctrl-player    { min-width: 110px; padding: .75rem .85rem; }
+  .ctrl-avatar    { width: 38px; height: 38px; font-size: .78rem; }
+  .ctrl-vs        { font-size: 1.25rem; }
+
+  /* Ayarlar */
+  .fb-settings   { padding: .85rem; }
+  .setting-row   { gap: .45rem; }
+  .setting-label { min-width: 75px; font-size: .78rem; }
+  .opt-btn       { padding: .28rem .62rem; font-size: .78rem; }
+
+  /* Lobi */
+  .fb-start-btn  { padding: .85rem 2rem; font-size: .88rem; }
+
+  /* Bekleme */
+  .waiting-card  { padding: 1.25rem .85rem; }
+
+  /* Oyun */
+  #screen-game   { padding: .35rem .35rem 0; }
+  .scoreboard    { padding: .45rem .6rem; margin-bottom: .4rem; }
+  .sb-name       { display: none; }
+  .sb-score      { font-size: 1.5rem; }
+  .sb-timer      { font-size: 1.15rem; padding: .15rem .55rem; }
+  .sb-avatar     { width: 24px; height: 24px; font-size: .6rem; }
+
+  .power-bars    { margin-bottom: .4rem; }
+  .power-label   { display: none; }
+  .power-key     { display: none; }
+
+  .game-bar      { padding: .38rem 0; }
+  .ctrl-hint     { display: none; }
+
+  /* Oyun sonu */
+  .go-card    { padding: 1.75rem 1rem; }
+  .go-trophy  { font-size: 3.5rem; }
+  .go-score   { font-size: 2.5rem; }
+
+  /* D-pad küçült */
+  .touch-dpad,
+  .touch-dpad-2 { width: 110px; height: 110px; }
+  .dpad-btn     { width: 38px; height: 38px; font-size: .9rem; }
+  .dpad-up, .dpad-down  { left: 36px; }
+  .dpad-left, .dpad-right { top: 36px; }
+  .touch-dpad::after, .touch-dpad-2::after { top:36px; left:36px; width:38px; height:38px; }
+  .touch-shoot-btn { width: 54px; height: 54px; font-size: .62rem; }
+
+  /* Canvas'ın dokunmatik pad için alan bırakması */
+  .canvas-wrap { margin-bottom: 0; }
+}
+
+@media (max-width: 380px) {
+  .mode-card  { min-width: 60px; padding: .5rem .35rem; }
+  .mode-icon  { font-size: 1.1rem; }
+  .touch-dpad,
+  .touch-dpad-2 { width: 96px; height: 96px; }
+  .dpad-btn     { width: 32px; height: 32px; font-size: .8rem; }
+  .dpad-up, .dpad-down  { left: 32px; }
+  .dpad-left, .dpad-right { top: 32px; }
+  .touch-dpad::after, .touch-dpad-2::after { top:32px; left:32px; width:32px; height:32px; }
+}
